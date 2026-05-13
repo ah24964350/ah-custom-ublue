@@ -18,6 +18,8 @@ dnf5 install -y tmux adw-gtk3-theme cmatrix fastfetch geany gtkhash-thunar libvi
 # dnf5 -y install package
 # Disable COPRs so they don't end up enabled on the final image:
 # dnf5 -y copr disable ublue-os/staging
+dnf5 -y copr enable wezfurlong/wezterm-nightly
+dnf5 install -y wezterm
 
 #### Example for enabling a System Unit File
 
