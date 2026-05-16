@@ -21,7 +21,12 @@ dnf5 install -y --setopt=install_weak_deps=0 xorg-x11-xauth xorg-x11-server-Xorg
 # Clone → build → install ly
 git clone --depth 1 https://codeberg.org/fairyglade/ly.git /tmp/ly
 cd /tmp/ly
+
+# Fix for Zig cache directory in container builds
+mkdir -p /root/.cache/zig
+
 zig build installexe -Dinit_system=systemd
+
 cd /
 rm -rf /tmp/ly
 
