@@ -15,8 +15,8 @@ dnf5 install -y wezterm
 # Build dependencies
 dnf5 install -y --setopt=install_weak_deps=0 zig pam-devel libxcb-devel
 
-# Runtime dependencies needed by ly
-dnf5 install -y --setopt=install_weak_deps=0 xorg-x11-xauth xorg-x11-server brightnessctl
+# Runtime dependencies needed by ly (fixed for Fedora 44)
+dnf5 install -y --setopt=install_weak_deps=0 xorg-x11-xauth xorg-x11-server-Xorg brightnessctl
 
 # Clone → build → install ly
 git clone --depth 1 https://codeberg.org/fairyglade/ly.git /tmp/ly
