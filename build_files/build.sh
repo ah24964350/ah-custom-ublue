@@ -7,7 +7,7 @@ dnf5 install -y adw-gtk3-theme cmatrix fastfetch geany gtkhash-thunar qt5-qtwayl
 
 dnf5 install -y --setopt=install_weak_deps=0 @swaywm-extended @virtualization
 
-# Wezterm nightly
+# Wezterm nightly (COPR)
 dnf5 -y copr enable wezfurlong/wezterm-nightly
 dnf5 install -y wezterm
 
@@ -18,13 +18,15 @@ dnf5 install -y --setopt=install_weak_deps=0 zig pam-devel libxcb-devel
 # Runtime dependencies needed by ly (fixed for Fedora 44)
 dnf5 install -y --setopt=install_weak_deps=0 xorg-x11-xauth xorg-x11-server-Xorg brightnessctl
 
-# Clone → build → install ly
+# Clone ly
 git clone --depth 1 https://codeberg.org/fairyglade/ly.git /tmp/ly
 cd /tmp/ly
 
-# Fix for Zig cache directory in container builds
-mkdir -p /root/.cache/zig
+# Zig cache fix (Containerfile already mounts /var/cache as cache)
+mkdir -p /var/cache/zig
+export ZIG_GLOBAL_CACHE_DIR=/var/cache/zig
 
+# Build and install ly
 zig build installexe -Dinit_system=systemd
 
 cd /
@@ -34,6 +36,9 @@ rm -rf /tmp/ly
 systemctl disable gdm.service sddm.service lightdm.service || true
 systemctl disable getty@tty2.service || true
 systemctl enable ly@tty2.service
+
+# Disable the COPR so it doesn't stay enabled in the final image
+dnf5 -y copr disable wezfurlong/wezterm-nightly
 
 ### Final cleanup
 dnf5 clean all
